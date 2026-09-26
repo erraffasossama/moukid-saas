@@ -1,0 +1,49 @@
+<!DOCTYPE html><html dir="rtl"><head><meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{font-family:Arial;background:#f5f5f5;display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0}
+.card{background:white;padding:30px;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,0.1);width:100%;max-width:360px;text-align:center}
+.logo{font-size:28px;font-weight:bold;margin-bottom:5px}
+.sub{font-size:14px;color:#777;margin-bottom:20px}
+input{width:100%;padding:14px;margin:8px 0;border:1px solid #ddd;border-radius:12px;box-sizing:border-box;text-align:right}
+.btn{width:100%;padding:14px;border:none;border-radius:12px;font-size:16px;cursor:pointer;font-weight:bold}
+.btn-black{background:#111;color:white}
+.btn-green{background:#22c55e;color:white}
+.tabs{display:flex;background:#f0f0f0;border-radius:12px;padding:4px;margin-bottom:20px}
+.tab{flex:1;padding:10px;border-radius:8px;cursor:pointer}
+.tab.active{background:white;box-shadow:0 2px 5px rgba(0,0,0,0.1)}
+.hidden{display:none}
+</style>
+</head><body>
+<div class="card">
+<div class="logo">Moukid 🟢</div>
+<div class="sub">حول الطلبات الوهمية لتأكيدات حقيقية</div>
+
+<div class="tabs">
+<div id="t1" class="tab active" onclick="show('reg')">حساب جديد</div>
+<div id="t2" class="tab" onclick="show('login')">دخول</div>
+</div>
+
+<!-- تسجيل -->
+<form id="regForm" method="POST" action="/register">
+<input name="email" placeholder="الإيميل ديالك" required>
+<input name="password" type="password" placeholder="كلمة السر" required>
+<button class="btn btn-black">ابدأ مجاناً - 3 أيام فابور 🎁</button>
+</form>
+
+<!-- دخول -->
+<form id="loginForm" class="hidden" method="POST" action="/login">
+<input name="email" placeholder="الإيميل" required>
+<input name="password" type="password" placeholder="كلمة السر" required>
+<button class="btn btn-green">دخول</button>
+</form>
+
+</div>
+<script>
+function show(type){
+ document.getElementById('regForm').classList.toggle('hidden', type!=='reg');
+ document.getElementById('loginForm').classList.toggle('hidden', type!=='login');
+ document.getElementById('t1').classList.toggle('active', type==='reg');
+ document.getElementById('t2').classList.toggle('active', type==='login');
+}
+</script>
+</body></html>

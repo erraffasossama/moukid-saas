@@ -1,0 +1,74 @@
+
+<!DOCTYPE html><html dir="rtl"><head><meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{font-family:Arial;background:#f7f7f8;margin:0}
+.header{background:white;padding:15px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eee}
+.header b{font-size:20px}
+.container{padding:20px;max-width:500px;margin:auto}
+.card{background:white;border-radius:16px;padding:20px;margin-bottom:15px;box-shadow:0 2px 10px rgba(0,0,0,0.05)}
+.qr{text-align:center}
+.qr img{width:220px;border-radius:12px}
+.badge{padding:6px 12px;border-radius:20px;font-size:13px}
+.badge-green{background:#dcfce7;color:#166534}
+.badge-orange{background:#fef3c7;color:#92400e}
+input{width:100%;padding:14px;margin:8px 0;border:1px solid #ddd;border-radius:12px;box-sizing:border-box;text-align:right}
+.btn{width:100%;padding:14px;background:#22c55e;color:white;border:none;border-radius:12px;font-size:17px;font-weight:bold;cursor:pointer}
+.stat{display:flex;justify-content:space-between;margin-top:15px}
+.stat div{text-align:center;flex:1}
+.stat b{font-size:22px;display:block}
+</style>
+</head><body>
+<div class="header"><b>Moukid 🟢</b><a href="/" style="font-size:13px;color:#777">خروج</a></div>
+<div class="container">
+
+<div class="card qr" id="qrCard">
+<h3>ربط واتساب</h3>
+<div id="qrbox">⏳ كنوجد QR...</div>
+<p style="font-size:13px;color:#777">حل واتساب > الأجهزة المرتبطة > ربط جهاز</p>
+</div>
+
+<div class="card">
+<h3>📤 صيفط تأكيد جديد</h3>
+<input id="num" placeholder="نمرة الزبون 06...">
+<input id="name" placeholder="سمية الزبون">
+<button class="btn" onclick="sifet()">صيفط رسالة تأكيد</button>
+<p id="res" style="text-align:center;margin-top:10px"></p>
+</div>
+
+<div class="card">
+<div class="stat">
+<div><b id="sent">0</b><span style="font-size:12px;color:#777">تصيفطات</span></div>
+<div><b id="conf">0</b><span style="font-size:12px;color:#777">تأكدات</span></div>
+<div><b>3</b><span style="font-size:12px;color:#777">أيام متبقية</span></div>
+</div>
+</div>
+
+</div>
+<script>
+let sent=0;
+async function loadQR(){
+ let r=await fetch('/qr'); let j=await r.json();
+ if(j.qr=='READY'){
+  document.getElementById('qrbox').innerHTML='<span class="badge badge-green">✅ واتساب مربوط وخداام</span>';
+  document.getElementById('qrCard').style.border='2px solid #22c55e';
+ } else if(j.qr){
+  document.getElementById('qrbox').innerHTML='<img src="'+j.qr+'">';
+ } else setTimeout(loadQR,2000);
+}
+loadQR();
+setInterval(loadQR,4000);
+
+async function sifet(){
+ let numero=document.getElementById('num').value, smiya=document.getElementById('name').value;
+ if(!numero) return alert('دخل النمرة');
+ document.getElementById('res').innerText='⏳ كنصيفط...';
+ let r=await fetch('/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({numero,smiya})});
+ let j=await r.json();
+ if(j.success){
+  document.getElementById('res').innerText='✅ تصيفطات لـ '+smiya;
+  document.getElementById('num').value=''; document.getElementById('name').value='';
+  sent++; document.getElementById('sent').innerText=sent;
+ } else document.getElementById('res').innerText='❌ '+j.error;
+}
+</script>
+</body></html>
